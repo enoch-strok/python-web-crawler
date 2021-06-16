@@ -1,5 +1,6 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
+import re
 
 my_url = "https://en.wikipedia.org/wiki/Microsoft"
 
@@ -9,59 +10,37 @@ uClient.close()
 
 page_soup = soup(page_html, "html.parser")
 
-print("\--------------Code Working----------------/")
+historyStart = page_soup.find("span",{"id":"History"})
+findNext = historyStart.find_next(string=True)
+findNextAll = historyStart.find_all_next(string=True)
 
-
-search = page_soup.findAll("span",{"class":"mw-headline"})
-search1 = page_soup.find("span",{"id":"History"})
-search2 = page_soup.find("span",{"id":"Corporate_affairs"})
-search3 = page_soup.findAll("p")
-search4 = page_soup.findAll("h2")
-
-# print(nextThing)
-
-# TODO: This is the latest working code block
-# firstThing = page_soup.find("span",{"id":"History"})
-# nextThing = firstThing.find_all_next(string=True)
-# for stuff in nextThing:
-#     result = stuff
-#     print(result)
-
-# TODO: I need to create a for loop that runs "find_next" until it reaches id=Corporate_affairs (if id != corporate affairs, stop loop)
-
-for things in search4:
-    result4 = things.text
-    print(result4)
+raw_data_list = []
+clean_data_list = []
     
-# print(len(search))
-# print(search[0])
-# print(search[8])
+for x in findNextAll:
+    if x == "Corporate affairs": break
+    cleanData = re.findall("[a-zA-Z']+", x)
+    for z in cleanData:
+        if z:
+            clean_data_list.append(z)
 
-# for stuff in search:
-#     result = stuff.string
-#     print(result)
-    
-# for things in search3:
-#     result2 = things.text
-#     print(result2)
-    
-print("----------")
+wordfreq = []
+for w in clean_data_list:
+    wordfreq.append(clean_data_list.count(w))
 
-# print(search1.contents)
-# print(page_soup.p.next_sibling)
-# print(search1)
-# print(search2)
-# print(result)
+def wordListToFreqDict(wordlist):
+    wordfreq = [wordlist.count(p) for p in wordlist]
+    return dict(list(zip(wordlist,wordfreq)))
 
+test = wordListToFreqDict(clean_data_list)
 
+def sortFreqDict(freqdict):
+    aux = [(freqdict[key], key) for key in freqdict]
+    aux.sort()
+    aux.reverse()
+    return aux
 
-# print(page_soup.findAll("p"))
-# print(page_soup.findAll("p",{"id":"History"}))
-# print("h1: ",page_soup.h1.text)
+test2 = sortFreqDict(test)
 
-# containers = page_soup.findAll("span",{"id":"History"})
-# print(len(containers))
-
-# containers2 = page_soup.findAll("p")
-# print(len(containers2))
-# print(containers2)
+for x in range(10):
+    print(test2[x])
