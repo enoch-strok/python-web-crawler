@@ -8,6 +8,13 @@ uClient = uReq(my_url)
 page_html = uClient.read()
 uClient.close()
 
+
+# //------------------ Adjust Here ------------------ //
+words_to_display = 10
+words_to_exclude = 'put_some_words_in_here'
+# //------------------ Adjust Here ------------------ //
+
+
 page_soup = soup(page_html, "html.parser")
 
 historyStart = page_soup.find("span",{"id":"History"})
@@ -20,7 +27,7 @@ for x in findNextAll:
     if x == "Corporate affairs": break
     cleanData = re.findall("[a-zA-Z']+", x)
     for z in cleanData:
-        if z:
+        if z and z != words_to_exclude:
             clean_data_list.append(z)
 
 wordfreq = []
@@ -41,5 +48,12 @@ def sortFreqDict(freqdict):
 
 test2 = sortFreqDict(test)
 
-for x in range(10):
-    print(test2[x])
+def final_return(x):
+    print(x)
+    return x
+
+def final_results(y):
+    for x in range(words_to_display):
+        final_return(y[x])
+
+final_results(test2)
