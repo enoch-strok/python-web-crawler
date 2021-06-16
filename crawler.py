@@ -8,8 +8,12 @@ uClient = uReq(my_url)
 page_html = uClient.read()
 uClient.close()
 
+
+# //------------------ Adjust Here ------------------ //
 words_to_display = 10
 words_to_exclude = 'put_some_words_in_here'
+# //------------------ Adjust Here ------------------ //
+
 
 page_soup = soup(page_html, "html.parser")
 
