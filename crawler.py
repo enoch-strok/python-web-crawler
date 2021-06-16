@@ -1,5 +1,6 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
+import re
 
 my_url = "https://en.wikipedia.org/wiki/Microsoft"
 
@@ -9,59 +10,80 @@ uClient.close()
 
 page_soup = soup(page_html, "html.parser")
 
-print("\--------------Code Working----------------/")
+print("\--------------H2 Categories----------------/")
 
-
-search = page_soup.findAll("span",{"class":"mw-headline"})
-search1 = page_soup.find("span",{"id":"History"})
-search2 = page_soup.find("span",{"id":"Corporate_affairs"})
-search3 = page_soup.findAll("p")
 search4 = page_soup.findAll("h2")
-
-# print(nextThing)
-
-# TODO: This is the latest working code block
-# firstThing = page_soup.find("span",{"id":"History"})
-# nextThing = firstThing.find_all_next(string=True)
-# for stuff in nextThing:
-#     result = stuff
-#     print(result)
-
-# TODO: I need to create a for loop that runs "find_next" until it reaches id=Corporate_affairs (if id != corporate affairs, stop loop)
-
 for things in search4:
     result4 = things.text
     print(result4)
     
-# print(len(search))
-# print(search[0])
-# print(search[8])
 
-# for stuff in search:
-#     result = stuff.string
-#     print(result)
+print("\--------------Loop Search----------------/")
+
+historyStart = page_soup.find("span",{"id":"History"})
+findNext = historyStart.find_next(string=True)
+findNextAll = historyStart.find_all_next(string=True)
+
+raw_data_list = []
+clean_data_list = []
     
-# for things in search3:
-#     result2 = things.text
-#     print(result2)
+for x in findNextAll:
+    if x == "Corporate affairs": break
+    # print(x)
+    # cleanData = x.split(" ", )
+
+    # rawData = re.split(' ',x)
+    # for y in rawData:
+    #     raw_data_list.append(y)
     
-print("----------")
+    cleanData = re.findall("[a-zA-Z']+", x)
+    # raw_data.append(cleanData)
+    for z in cleanData:
+        if z:
+            # print(cleanData)
+            clean_data_list.append(z)
+        
 
-# print(search1.contents)
-# print(page_soup.p.next_sibling)
-# print(search1)
-# print(search2)
-# print(result)
+# print(clean_data_list)
+# print(len(clean_data_list))
+# print(raw_data_list)
+# print(len(raw_data_list))
 
+# wordstring = 'it was the best of times it was the worst of times '
+# wordstring += 'it was the age of wisdom it was the age of foolishness'
 
+# wordlist = wordstring.split()
 
-# print(page_soup.findAll("p"))
-# print(page_soup.findAll("p",{"id":"History"}))
-# print("h1: ",page_soup.h1.text)
+wordfreq = []
+for w in clean_data_list:
+    wordfreq.append(clean_data_list.count(w))
 
-# containers = page_soup.findAll("span",{"id":"History"})
-# print(len(containers))
+# print("String\n" + wordstring +"\n")
+# print("List\n" + str(clean_data_list) + "\n")
+# print("Frequencies\n" + str(wordfreq) + "\n")
+# print("Pairs\n" + str(list(zip(clean_data_list, wordfreq))))
 
-# containers2 = page_soup.findAll("p")
-# print(len(containers2))
-# print(containers2)
+def wordListToFreqDict(wordlist):
+    wordfreq = [wordlist.count(p) for p in wordlist]
+    return dict(list(zip(wordlist,wordfreq)))
+
+test = wordListToFreqDict(clean_data_list)
+# print(test)
+
+def sortFreqDict(freqdict):
+    aux = [(freqdict[key], key) for key in freqdict]
+    aux.sort()
+    aux.reverse()
+    return aux
+
+test2 = sortFreqDict(test)
+print(test2[0])
+print(test2[1])
+print(test2[2])
+print(test2[3])
+print(test2[4])
+print(test2[5])
+print(test2[6])
+print(test2[7])
+print(test2[8])
+print(test2[9])
