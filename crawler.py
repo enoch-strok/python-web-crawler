@@ -14,7 +14,6 @@ historyStart = page_soup.find("span",{"id":"History"})
 findNext = historyStart.find_next(string=True)
 findNextAll = historyStart.find_all_next(string=True)
 
-raw_data_list = []
 clean_data_list = []
     
 for x in findNextAll:
