@@ -1,3 +1,5 @@
 # python-web-crawler
 
-In Progress, not complete! 06/15/2021
+Completed project on 06/15/2021
+
+Duration: 8 Hours
